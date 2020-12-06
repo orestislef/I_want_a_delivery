@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "143493892644",
+    "project_id": "iwantadelivery-42fef",
+    "storage_bucket": "iwantadelivery-42fef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143493892644:android:b17f0ced7dd3b3d60ee6b1",
+        "android_client_info": {
+          "package_name": "com.revinad.iwantadelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "143493892644-e6g4is1a0o7ifvqjhe5bgf5ogisnqou4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8hRX4Q-Kb6UCB7QLXPRJY-v7xt9onP9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "143493892644-e6g4is1a0o7ifvqjhe5bgf5ogisnqou4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

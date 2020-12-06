@@ -1,0 +1,105 @@
+<resources>
+
+    <!-- General -->
+    <string name="app_name">I want a delivery</string>
+
+    <!-- for SplashActivity -->
+    <string name="i_want_delivery_logo_content_desc">είναι το logo για την εφαρμογή</string>
+
+    <!-- for Firebase Database reference -->
+    <string name="ref_users">Users</string>
+    <string name="ref_posts">Posts</string>
+    <string name="ref_tokens">Tokens</string>
+    <string name="ref_profileImage">ProfileImage</string>
+    <!--for firebase database Users reference -->
+    <string name="ref_users_profileImage">profileImage</string>
+    <string name="ref_users_username">username</string>
+    <string name="ref_users_profession">profession</string>
+    <string name="ref_users_status">status</string>
+    <string name="ref_users_street">street</string>
+    <string name="ref_users_area">area</string>
+    <!-- for firebase database Posts reference -->
+    <string name="ref_posts_completed">completed</string>
+    <string name="ref_posts_id_of_shop">idOfShop</string>
+    <string name="ref_posts_on_my_way">onMyWay</string>
+    <string name="ref_posts_postdate">postDate</string>
+    <string name="ref_posts_user_profile_image_url">userProfileImageUrl</string>
+    <string name="ref_posts_post_desc">postDesc</string>
+    <string name="ref_posts_username">username</string>
+    <string name="ref_posts_id_of_user">idOfUser</string>
+    <string name="ref_post_username_of_on_my_way">onMyWayUsername</string>
+    <string name="ref_post_completed_date">completedDate</string>
+
+
+    <!-- for LoginActivity -->
+    <string name="login_label">Σύνδεση</string>
+    <string name="input_email_hint">E-mail</string>
+    <string name="input_password_hint">Κωδικός</string>
+    <string name="forgot_password_label">Ξέχασες τον κωδικό σου;</string>
+    <string name="login_button_label">Σύνδεση</string>
+    <string name="create_new_account_label">Δημιουργησε καινούργιο λογαριασμό</string>
+    <string name="email_is_not_valid">Δεν είναι σωστό το email</string>
+    <string name="password_must_be_greater_than_8">Ο κωδικός πρέπει να είναι μεγαλύτερος απο 8 γράμματα</string>
+    <string name="please_wait_while_login">Παρακαλώ περιμένετε μέχρι να γίνει σύδνεση…</string>
+    <string name="connection_is_successful">Επιτυχείς σύνδεση</string>
+
+    <!-- for RegisterActivity -->
+    <string name="register_label">Εγγραφή</string>
+    <string name="input_confirm_password">Επιβεβαίωση κωδικού</string>
+    <string name="register_button_label">Εγγραφή</string>
+    <string name="already_have_account_label">Έχω ήδη λογαριασμό</string>
+    <string name="password_did_not_match">Ο κωδικός δεν αντιστοιχεί με τον παραπάνω</string>
+    <string name="please_wait_while_registration">Παρακαλώ περιμένετε μέχρι να γίνει η εγγραφή…</string>
+    <string name="registration_is_successful">Επιτυχείς εγγραφή</string>
+    <string name="registration_is_failed">Αποτυχία εγγραφής</string>
+
+    <!-- for ForgotPasswordActivity -->
+    <string name="input_reset_email_label">Βάλτε το e-mail που θέλετε να κάνετε ανάκτηση κωδικού</string>
+    <string name="reset_label">Αποστολη</string>
+    <string name="wrong_email_input">Λάθος e-mail</string>
+    <string name="please_check_your_email">Παρακαλώ ελέγξτε το e-mail σας</string>
+    <string name="reset_email_not_sended">Το e-mail επαναφοράς κωδικου δεν εστάλει</string>
+
+    <!--for SetupActivity -->
+    <string name="shop_label">Κατάστημα</string>
+    <string name="delivery_boy_label">Ντελιβεράς</string>
+    <string name="btn_save_label">Αποθήκευση</string>
+    <string name="setup_profile_title">Επεξεργασία πληροφοριών</string>
+    <string name="username_is_not_valid">Το όνομα δεν ειναι έγκυρο</string>
+    <string name="street_is_not_valid">Η οδός δεν ειναι έγκυρη</string>
+    <string name="area_is_not_valid">Η περιοχή δεν ειναι έγκυρη</string>
+    <string name="please_select_image_setup">Επιλέξτε εικόνα</string>
+    <string name="adding_setup_profile">Προσθήκη στοιχείων προφίλ</string>
+    <string name="username_shop_label">Όνομα καταστήματος</string>
+    <string name="street_shop_label">Διεύθυνση καταστήματος</string>
+    <string name="area_shop_label">Περιοχή καταστήματος</string>
+    <string name="profession_shop" translatable="false">shop</string>
+    <string name="username_delivery_boy_label">Όνομα ντελιβερά</string>
+    <string name="street_delivery_boy_label">Διεύθυνση εργασίας</string>
+    <string name="area_delivery_boy_label">Περιοχή εργασίας</string>
+    <string name="profession_delivery_boy" translatable="false">delivery_boy</string>
+    <string name="setup_complete_msg">Επιτυχής ολοκλήρωση αποθήκευσης δεδομενων</string>
+    <string name="error_uploading_image">Υπήρξε πρόβλημα στο ανέβασμα της εικόνας</string>
+
+    <!--for MainActivity -->
+    <string name="time_ago_label" translatable="false">0 time Ago</string>
+    <string name="post_disc_label">"Αυτή είναι η περιγραφή "</string>
+    <string name="i_want_a_delivery_boy_btn_label">Θέλω ντελιβερά</string>
+    <string name="logout_title">Αποσύνδεση</string>
+    <string name="home_title">Κεντρική</string>
+    <string name="profile_title">Επεξεργασία προφίλ</string>
+    <string name="input_name">Όνομα</string>
+    <string name="input_street">Οδός</string>
+    <string name="input_area">Περιοχή</string>
+    <string name="btn_update_label">Αποθήκευση</string>
+    <string name="notification_sended_to_token">Στάλθηκε ειδοποίηση</string>
+    <string name="ask_for_delivery_boy_at_street">Θέλω έναν ντελιβερά στην οδό: </string>
+    <string name="ask_for_delivery_boy_at_area"> στην περιοχη:</string>
+    <string name="post_added_successful">Επιτυχής προσθήκη</string>
+    <string name="profession_label" translatable="false">profession</string>
+
+
+
+
+
+</resources>
