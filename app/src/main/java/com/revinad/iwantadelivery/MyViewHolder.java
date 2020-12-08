@@ -3,6 +3,7 @@ package com.revinad.iwantadelivery;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     CardView cardView;
     ConstraintLayout singleViewPostConstraint;
     CheckBox completeCB, onMyWayCB;
+    Button mapBtn;
 
 
     public MyViewHolder(@NonNull View itemView) {
@@ -43,6 +45,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         cardView = itemView.findViewById(R.id.singlePostCardView);
         completeCB = itemView.findViewById(R.id.completedCB);
         onMyWayCB = itemView.findViewById(R.id.onMyWayCB);
+        mapBtn = itemView.findViewById(R.id.mapBtn);
     }
 
     public void initCB(String postKey, DatabaseReference postRef, Context context) {

@@ -42,11 +42,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/username_delivery_boy_label"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mapBtn"
                 app:layout_constraintStart_toEndOf="@+id/profileImagePost"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +57,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/time_ago_label"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/profileUsernamePost"
+                app:layout_constraintEnd_toEndOf="@+id/mapBtn"
                 app:layout_constraintStart_toStartOf="@+id/profileUsernamePost"
                 app:layout_constraintTop_toBottomOf="@+id/profileUsernamePost" />
 
@@ -65,9 +65,10 @@
                 android:id="@+id/postDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/post_disc_label"
                 app:layout_constraintEnd_toEndOf="@+id/timeAgo"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/timeAgo"
                 app:layout_constraintTop_toBottomOf="@+id/timeAgo" />
 
@@ -142,6 +143,16 @@
                 app:layout_constraintEnd_toEndOf="@+id/view2"
                 app:layout_constraintStart_toEndOf="@+id/view"
                 app:layout_constraintTop_toTopOf="@+id/view" />
+
+            <Button
+                android:id="@+id/mapBtn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ic_baseline_map_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

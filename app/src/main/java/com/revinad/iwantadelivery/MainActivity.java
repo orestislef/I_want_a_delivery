@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -172,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         hashMap.put(getString(R.string.ref_posts_completed), false);
         hashMap.put(getString(R.string.ref_post_username_of_on_my_way),"");
         hashMap.put(getString(R.string.ref_post_completed_date),"");
+        hashMap.put(getString(R.string.ref_post_street),streetV);
 
         postRef.child(strDate + " " + mUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
@@ -223,6 +225,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //sets check from value of firebaseDatabase
                 holder.completeCB.setChecked(model.getCompleted());
                 holder.onMyWayCB.setChecked(model.getOnMyWay());
+
+                //mapButton go to Intent google maps onClick
+                holder.mapBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse("http://maps.google.co.in/maps?q=" + model.getStreet().replace(" ","+")));
+                        startActivity(intent);
+                    }
+                });
+
             }
 
             @NonNull

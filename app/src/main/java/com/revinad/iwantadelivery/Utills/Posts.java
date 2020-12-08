@@ -2,13 +2,13 @@ package com.revinad.iwantadelivery.Utills;
 
 public class Posts {
 
-    private String idOfUser, postDate, postDesc, userProfileImageUrl, username, onMyWayUsername, completedDate;
+    private String idOfUser, postDate, postDesc, userProfileImageUrl, username, onMyWayUsername, completedDate, street;
     private Boolean onMyWay, completed;
 
     public Posts() {
     }
 
-    public Posts(String idOfUser, String postDate, String postDesc, String userProfileImageUrl, String username, String onMyWayUsername, String completedDate, Boolean onMyWay, Boolean completed) {
+    public Posts(String idOfUser, String postDate, String postDesc, String userProfileImageUrl, String username, String onMyWayUsername, String completedDate, Boolean onMyWay, Boolean completed, String street) {
         this.idOfUser = idOfUser;
         this.postDate = postDate;
         this.postDesc = postDesc;
@@ -18,6 +18,15 @@ public class Posts {
         this.completedDate = completedDate;
         this.onMyWay = onMyWay;
         this.completed = completed;
+        this.street = street;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getIdOfUser() {
