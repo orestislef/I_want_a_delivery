@@ -43,6 +43,7 @@ import com.revinad.iwantadelivery.ApiFcmNotification.SendNotificationModel;
 import com.revinad.iwantadelivery.Utills.Posts;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -171,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         hashMap.put(getString(R.string.ref_posts_id_of_user), mAuth.getUid());
         hashMap.put(getString(R.string.ref_posts_on_my_way), false);
         hashMap.put(getString(R.string.ref_posts_completed), false);
-        hashMap.put(getString(R.string.ref_post_username_of_on_my_way),"");
-        hashMap.put(getString(R.string.ref_post_completed_date),"");
-        hashMap.put(getString(R.string.ref_post_street),streetV);
+        hashMap.put(getString(R.string.ref_post_username_of_on_my_way), "");
+        hashMap.put(getString(R.string.ref_post_completed_date), "");
+        hashMap.put(getString(R.string.ref_post_street), streetV);
 
         postRef.child(strDate + " " + mUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
@@ -221,7 +222,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //holder for the check Buttons
                 //sets isChecked state from local completeCB, onMyWayCB to firebaseDatabase
-                holder.initCB(postKey, postRef, getApplicationContext());
+
+                Date date = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                String strDate = formatter.format(date);
+
+                holder.initCB(postKey, postRef, getApplicationContext(), usernameV, strDate);
                 //sets check from value of firebaseDatabase
                 holder.completeCB.setChecked(model.getCompleted());
                 holder.onMyWayCB.setChecked(model.getOnMyWay());
@@ -231,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                Uri.parse("http://maps.google.co.in/maps?q=" + model.getStreet().replace(" ","+")));
+                                Uri.parse("http://maps.google.co.in/maps?q=" + model.getStreet().replace(" ", "+")));
                         startActivity(intent);
                     }
                 });

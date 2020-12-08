@@ -48,7 +48,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         mapBtn = itemView.findViewById(R.id.mapBtn);
     }
 
-    public void initCB(String postKey, DatabaseReference postRef, Context context) {
+    public void initCB(String postKey, DatabaseReference postRef, Context context, String mUsername, String mDate) {
 
         onMyWayCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -61,6 +61,19 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                         if (task.isSuccessful()) {
                             if (isChecked) {
                                 onMyWayCB.setClickable(false);
+                                //Adding Username of onTheWay to onTheWayUsername <- Database
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way),mUsername);
+
+                                postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            Log.d(TAG, "onComplete: Successful onMyWay username added: "+mUsername);
+                                        }
+                                    }
+                                });
+
                             }else onMyWayCB.setClickable(true);
                             Log.d(TAG, "onComplete: onMyWayCB: " + isChecked);
                         }
@@ -79,6 +92,16 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                         if (task.isSuccessful()) {
                             if (isChecked) {
                                 completeCB.setClickable(false);
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put(context.getString(R.string.ref_post_completed_date),mDate);
+                                postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            Log.d(TAG, "onComplete: Successful complete date added: "+mDate);
+                                        }
+                                    }
+                                });
                             }else completeCB.setClickable(true);
                             Log.d(TAG, "onComplete: completeCB: " + isChecked);
                         }
