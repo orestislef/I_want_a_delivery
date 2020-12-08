@@ -49,6 +49,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void initCB(String postKey, DatabaseReference postRef, Context context, String mUsername, String mDate) {
+        //TODO: if onMyWayCB.isChecked(false) -> completeCB.setClickable(false) *need to +id the view
+        //      if onMyWayCB.isChecked(true) -> completeCB.setClickable(true)
 
         onMyWayCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -81,6 +83,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                 });
             }
         });
+
+        //TODO: if completeCB.isChecked(true) -> show btn to delete Post(postKey) from Database
         completeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -92,6 +96,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                         if (task.isSuccessful()) {
                             if (isChecked) {
                                 completeCB.setClickable(false);
+
+                                //adding Date of complete delivery
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put(context.getString(R.string.ref_post_completed_date),mDate);
                                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
