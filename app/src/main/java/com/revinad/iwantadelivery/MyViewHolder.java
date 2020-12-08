@@ -65,18 +65,18 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                                 onMyWayCB.setClickable(false);
                                 //Adding Username of onTheWay to onTheWayUsername <- Database
                                 HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way),mUsername);
+                                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), mUsername);
 
                                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            Log.d(TAG, "onComplete: Successful onMyWay username added: "+mUsername);
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "onComplete: Successful onMyWay username added: " + mUsername);
                                         }
                                     }
                                 });
 
-                            }else onMyWayCB.setClickable(true);
+                            } else onMyWayCB.setClickable(true);
                             Log.d(TAG, "onComplete: onMyWayCB: " + isChecked);
                         }
                     }
@@ -99,16 +99,16 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 
                                 //adding Date of complete delivery
                                 HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put(context.getString(R.string.ref_post_completed_date),mDate);
+                                hashMap.put(context.getString(R.string.ref_post_completed_date), mDate);
                                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            Log.d(TAG, "onComplete: Successful complete date added: "+mDate);
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "onComplete: Successful complete date added: " + mDate);
                                         }
                                     }
                                 });
-                            }else completeCB.setClickable(true);
+                            } else completeCB.setClickable(true);
                             Log.d(TAG, "onComplete: completeCB: " + isChecked);
                         }
                     }
