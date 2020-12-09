@@ -46,6 +46,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         completeCB = itemView.findViewById(R.id.completedCB);
         onMyWayCB = itemView.findViewById(R.id.onMyWayCB);
         mapBtn = itemView.findViewById(R.id.mapBtn);
+
+        completeCB.setClickable(false);
     }
 
     public void initCB(String postKey, DatabaseReference postRef, Context context, String mUsername, String mDate) {
@@ -57,26 +59,14 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put(context.getString(R.string.ref_posts_on_my_way), isChecked);
+                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), mUsername);
+
                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            if (isChecked) {
-                                onMyWayCB.setClickable(false);
-                                //Adding Username of onTheWay to onTheWayUsername <- Database
-                                HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), mUsername);
-
-                                postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "onComplete: Successful onMyWay username added: " + mUsername);
-                                        }
-                                    }
-                                });
-
-                            } else onMyWayCB.setClickable(true);
+                            onMyWayCB.setClickable(!isChecked);
+                            completeCB.setClickable(isChecked);
                             Log.d(TAG, "onComplete: onMyWayCB: " + isChecked);
                         }
                     }
@@ -90,25 +80,13 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put(context.getString(R.string.ref_posts_completed), isChecked);
+                hashMap.put(context.getString(R.string.ref_post_completed_date), mDate);
+
                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            if (isChecked) {
-                                completeCB.setClickable(false);
-
-                                //adding Date of complete delivery
-                                HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put(context.getString(R.string.ref_post_completed_date), mDate);
-                                postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "onComplete: Successful complete date added: " + mDate);
-                                        }
-                                    }
-                                });
-                            } else completeCB.setClickable(true);
+                            completeCB.setClickable(!isChecked);
                             Log.d(TAG, "onComplete: completeCB: " + isChecked);
                         }
                     }

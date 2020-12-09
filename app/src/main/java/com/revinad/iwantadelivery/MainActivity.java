@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "error: " + error.toString(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onCancelled: No connection to postRef: "+error.toString());
             }
         });
     }
@@ -277,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "onFailure: sendNotificationToTokenCall" + t.toString());
-                Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -423,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                                         @Override
                                                         public void onCancelled(@NonNull DatabaseError error) {
-                                                            Toast.makeText(MainActivity.this, "error: " + error.toString(), Toast.LENGTH_SHORT).show();
+                                                            Log.d(TAG, "onCancelled: "+error.toString());
                                                         }
                                                     });
                                                 }
@@ -433,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(MainActivity.this, "error: " + error.toString(), Toast.LENGTH_SHORT).show();
+                                            Log.d(TAG, "onCancelled: "+error.toString());
                                         }
                                     });
 
