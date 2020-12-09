@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     });
 
                                     //Save delivery_boy tokens locally
-                                    mTokenRef.child(getString(R.string.profession_delivery_boy)).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    mTokenRef.child(getString(R.string.profession_delivery_boy)).addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             if (snapshot.exists()) {
@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 Log.d(TAG, "onDataChange: Total" + getString(R.string.profession_delivery_boy) + "Tokens: " + totalTokens);
                                                 for (int i = 0; i < totalTokens; i++) {
                                                     int finalI = i;
-                                                    mTokenRef.child(professionV + "/token" + i).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    mTokenRef.child(getString(R.string.profession_delivery_boy) + "/token" + i).addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                             if (snapshot.exists()) {
