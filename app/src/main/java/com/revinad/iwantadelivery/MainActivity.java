@@ -237,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+                //TODO: if onMyWayCB is checked send notification to shop
+
             }
 
             @NonNull
