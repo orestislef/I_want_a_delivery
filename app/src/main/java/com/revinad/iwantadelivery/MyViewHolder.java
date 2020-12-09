@@ -31,7 +31,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     CardView cardView;
     ConstraintLayout singleViewPostConstraint;
     CheckBox completeCB, onMyWayCB;
-    Button mapBtn;
+    Button mapBtn, deletePostBtn;
 
 
     public MyViewHolder(@NonNull View itemView) {
@@ -46,8 +46,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         completeCB = itemView.findViewById(R.id.completedCB);
         onMyWayCB = itemView.findViewById(R.id.onMyWayCB);
         mapBtn = itemView.findViewById(R.id.mapBtn);
+        deletePostBtn= itemView.findViewById(R.id.deletePostBtn);
 
-        completeCB.setClickable(false);
     }
 
     public void initCB(String postKey, DatabaseReference postRef, Context context) {

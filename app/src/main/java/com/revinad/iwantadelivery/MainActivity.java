@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d(TAG, "onCancelled: No connection to postRef: "+error.toString());
+                Log.d(TAG, "onCancelled: No connection to postRef: " + error.toString());
             }
         });
     }
@@ -234,6 +234,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                                 Uri.parse("http://maps.google.co.in/maps?q=" + model.getStreet().replace(" ", "+")));
                         startActivity(intent);
+                    }
+                });
+
+                //show deleteBtn if completeCB is checked
+                if (holder.completeCB.isChecked()) {
+                    holder.deletePostBtn.setVisibility(View.VISIBLE);
+                } else holder.deletePostBtn.setVisibility(View.INVISIBLE);
+
+                holder.deletePostBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        postRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d(TAG, "onComplete: post: "+postKey +" deleted");
+                            }
+                        });
                     }
                 });
 
@@ -419,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                                         @Override
                                                         public void onCancelled(@NonNull DatabaseError error) {
-                                                            Log.d(TAG, "onCancelled: "+error.toString());
+                                                            Log.d(TAG, "onCancelled: " + error.toString());
                                                         }
                                                     });
                                                 }
@@ -429,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
-                                            Log.d(TAG, "onCancelled: "+error.toString());
+                                            Log.d(TAG, "onCancelled: " + error.toString());
                                         }
                                     });
 

@@ -57,7 +57,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/time_ago_label"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/mapBtn"
+                app:layout_constraintEnd_toEndOf="@+id/profileUsernamePost"
                 app:layout_constraintStart_toStartOf="@+id/profileUsernamePost"
                 app:layout_constraintTop_toBottomOf="@+id/profileUsernamePost" />
 
@@ -66,9 +66,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/post_disc_label"
-                app:layout_constraintEnd_toEndOf="@+id/timeAgo"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/deletePostBtn"
                 app:layout_constraintStart_toStartOf="@+id/timeAgo"
                 app:layout_constraintTop_toBottomOf="@+id/timeAgo" />
 
@@ -116,6 +116,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView4"
                 app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -149,11 +150,21 @@
                 android:id="@+id/mapBtn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/ic_baseline_map_24"
+                app:layout_constraintBottom_toBottomOf="@+id/profileUsernamePost"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/profileUsernamePost" />
+
+            <Button
+                android:id="@+id/deletePostBtn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="invisible"
+                android:background="@drawable/ic_baseline_delete_forever_24"
+                app:layout_constraintBottom_toBottomOf="@+id/postDescription"
+                app:layout_constraintEnd_toEndOf="@+id/mapBtn"
+                app:layout_constraintTop_toTopOf="@+id/postDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
