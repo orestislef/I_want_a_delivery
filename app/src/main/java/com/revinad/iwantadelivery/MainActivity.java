@@ -222,12 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //holder for the check Buttons
                 //sets isChecked state from local completeCB, onMyWayCB to firebaseDatabase
-
-                Date date = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                String strDate = formatter.format(date);
-
-                holder.initCB(postKey, postRef, getApplicationContext(), usernameV, strDate);
+                holder.initCB(postKey, postRef, getApplicationContext());
                 //sets check from value of firebaseDatabase
                 holder.completeCB.setChecked(model.getCompleted());
                 holder.onMyWayCB.setChecked(model.getOnMyWay());

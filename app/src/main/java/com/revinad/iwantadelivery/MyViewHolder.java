@@ -50,7 +50,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         completeCB.setClickable(false);
     }
 
-    public void initCB(String postKey, DatabaseReference postRef, Context context, String mUsername, String mDate) {
+    public void initCB(String postKey, DatabaseReference postRef, Context context) {
 
         onMyWayCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -67,6 +67,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                             completeCB.setClickable(isChecked);
 
                             Log.d(TAG, "onComplete: onMyWayCB: " + isChecked);
+
+                            //TODO: send notification to shop
                         }
                     }
                 });
@@ -91,20 +93,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                         }
                     }
                 });
-            }
-        });
-    }
-
-    public void initCBText(String postKey, String uid, DatabaseReference postRef, Context context) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put(context.getString(R.string.ref_post_completed_date), new Date().toString());
-        hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), uid);
-        postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: ");
-                }
             }
         });
     }
