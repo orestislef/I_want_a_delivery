@@ -34,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.revinad.iwantadelivery.ApiFcmNotification.ApiClient;
@@ -207,7 +208,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //                              -> setClickable false onMyWay CheckBox
         //If profession = Delivery boy  -> hide addPostButton
         //                              -> show All posts
-        options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef, Posts.class).build();
+
+        if (professionV.equals(getString(R.string.profession_shop))){
+            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef.orderByChild(String.valueOf(getString(R.string.ref_posts_id_of_shop).equals(mAuth.getUid()))), Posts.class).build();
+
+        }else if (professionV.equals(getString(R.string.profession_delivery_boy))){
+            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef, Posts.class).build();
+
+        }
         adapter = new FirebaseRecyclerAdapter<Posts, MyViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Posts model) {
@@ -363,6 +371,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //header init Name and Picture
                         usernameHeader.setText(usernameV);
                         Picasso.get().load(profileImageUrlV).placeholder(R.drawable.profile_image).resize(250, 250).centerInside().into(profileImageViewHeader);
+
+                        //hide newPostBtn from profession=delivery_boy
+                        if (professionV.equals(getString(R.string.profession_delivery_boy))){
+                            addPostBtn.setVisibility(View.GONE);
+                        }
 
                         //Get token
                         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
