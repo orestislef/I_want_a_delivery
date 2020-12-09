@@ -27,7 +27,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     private final String TAG = "MyViewHolder";
 
     CircleImageView profileImage;
-    TextView username, timeAgo, postDesc, onMyWayUsername, completeDate;
+    TextView username, timeAgo, postDesc;
     CardView cardView;
     ConstraintLayout singleViewPostConstraint;
     CheckBox completeCB, onMyWayCB;
@@ -46,8 +46,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         completeCB = itemView.findViewById(R.id.completedCB);
         onMyWayCB = itemView.findViewById(R.id.onMyWayCB);
         mapBtn = itemView.findViewById(R.id.mapBtn);
-        onMyWayUsername = itemView.findViewById(R.id.onMyWayUsername);
-        completeDate = itemView.findViewById(R.id.completeDate);
 
         completeCB.setClickable(false);
     }
@@ -59,9 +57,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put(context.getString(R.string.ref_posts_on_my_way), isChecked);
-                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), mUsername);
-
-                onMyWayUsername.setText(mUsername);
+//                hashMap.put(context.getString(R.string.ref_post_username_of_on_my_way), mUsername);
 
                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -83,9 +79,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put(context.getString(R.string.ref_posts_completed), isChecked);
-                hashMap.put(context.getString(R.string.ref_post_completed_date), mDate);
-
-                completeDate.setText(mDate);
+//                hashMap.put(context.getString(R.string.ref_post_completed_date), mDate);
 
                 postRef.child(postKey).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

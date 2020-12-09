@@ -83,7 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/completeDate" />
+                app:layout_constraintTop_toBottomOf="@+id/postDescription" />
 
             <CheckBox
                 android:id="@+id/onMyWayCB"
@@ -154,26 +154,6 @@
                 android:background="@drawable/ic_baseline_map_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/onMyWayUsername"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="onMyWayUsername"
-                app:layout_constraintEnd_toEndOf="@+id/postDescription"
-                app:layout_constraintStart_toStartOf="@+id/postDescription"
-                app:layout_constraintTop_toBottomOf="@+id/postDescription" />
-
-            <TextView
-                android:id="@+id/completeDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="completeDate"
-                app:layout_constraintEnd_toEndOf="@+id/onMyWayUsername"
-                app:layout_constraintStart_toStartOf="@+id/onMyWayUsername"
-                app:layout_constraintTop_toBottomOf="@+id/onMyWayUsername" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
