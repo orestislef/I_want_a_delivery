@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -139,10 +140,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Log.d(TAG, "onCancelled: " + error.toString());
-
                             }
                         });
                     }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "onFailure: "+e.getMessage());
+                    mLoadingBar.dismiss();
                 }
             });
         }
