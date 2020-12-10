@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.IWantADelivery" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#004FEE</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary"> #000080</item>
+        <item name="colorPrimaryVariant">#4E5180</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#3C838C</item>
-        <item name="colorSecondaryVariant">#1EAC72</item>
+        <item name="colorSecondary">#2B2E43</item>
+        <item name="colorSecondaryVariant">#4E5180</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#797B92</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
