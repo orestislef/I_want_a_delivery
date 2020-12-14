@@ -102,6 +102,10 @@
     <string name="dialog_yes">Ναι</string>
     <string name="dialog_no">Οχι</string>
     <string name="notification_send_to_shop">Ερχομαι</string>
+    <string name="send_notification_label">Αποστολή ειδοποίησης σε</string>
+    <string name="send_notification_yes_label">Αποστολή</string>
+    <string name="send_notification_cancel_label">Άκυρο</string>
+    <string name="send_notification_comment_text_hint">Σχόλιο</string>
 
 
 

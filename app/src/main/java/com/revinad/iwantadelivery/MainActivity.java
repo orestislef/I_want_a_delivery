@@ -292,19 +292,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 holder.sendNotificationToShopBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //alert dialog for confirm delete
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("stalsimo idopiisis");
-                        final EditText comment = new EditText(getApplicationContext());
-                        comment.setHint("comment edw");
+                        //alert dialog for sendNotification to Token shop
+                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle(getString(R.string.send_notification_label)+" "+model.getUsername());
 
+                        //adding view for text input
+                        final EditText comment = new EditText(getApplicationContext());
+                        comment.setHint(getString(R.string.send_notification_comment_text_hint));
                         LinearLayout layout = new LinearLayout(getApplicationContext());
                         layout.setOrientation(LinearLayout.VERTICAL);
-                        layout.setPadding(24,24,24,24);
+                        layout.setPadding(48,24,32,24);
+                        comment.setText(getString(R.string.notification_send_to_shop));
                         layout.addView(comment);
                         builder.setView(layout);
 
-                        builder.setPositiveButton("stile twra", new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton(getString(R.string.send_notification_yes_label), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //sendNotificationToToken
@@ -324,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 });
 
                             }
-                        }).setNegativeButton("akyro", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(getString(R.string.send_notification_cancel_label), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
