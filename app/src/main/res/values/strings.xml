@@ -98,6 +98,9 @@
     <string name="ask_for_delivery_boy_at_area"> στην περιοχη:</string>
     <string name="post_added_successful">Επιτυχής προσθήκη</string>
     <string name="profession_label" translatable="false">profession</string>
+    <string name="are_you_sure_to_delete_post_label">Είστε σίγουροι ότι θέλετε να το διαγράψετε;</string>
+    <string name="dialog_yes">Ναι</string>
+    <string name="dialog_no">Οχι</string>
 
 
 

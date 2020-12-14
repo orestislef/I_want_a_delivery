@@ -8,7 +8,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -259,12 +261,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 holder.deletePostBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        postRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        //alert dialog for confirm delete
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle(getString(R.string.are_you_sure_to_delete_post_label));
+                        builder.setPositiveButton(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d(TAG, "onComplete: post: "+postKey +" deleted");
+                            public void onClick(DialogInterface dialog, int which) {
+                                //delete the post
+                                postRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Log.d(TAG, "onComplete: post: "+postKey +" deleted");
+                                    }
+                                });
+                            }
+                        }).setNegativeButton(getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                Log.d(TAG, "onClick: dialogDelete: Canceled");
                             }
                         });
+                        builder.show();
                     }
                 });
 

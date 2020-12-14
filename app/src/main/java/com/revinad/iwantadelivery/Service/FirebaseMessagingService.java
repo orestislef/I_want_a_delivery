@@ -88,7 +88,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.delivery_logo)
+                .setSmallIcon(R.drawable.delivery_logo_orange)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setContentInfo("info")
