@@ -248,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+                //TODO: if profession show what must show
+
                 //show sendNotificationToShopBtn if onMyWay is Checked
                 if (holder.onMyWayCB.isChecked()) {
                     holder.sendNotificationToShopBtn.setVisibility(View.VISIBLE);
