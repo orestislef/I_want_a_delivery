@@ -22,7 +22,6 @@ import com.revinad.iwantadelivery.R;
 import java.util.Map;
 
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
-import static android.media.RingtoneManager.getDefaultUri;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -66,16 +65,16 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(getString(R.string.app_name)+" channel FCM");
             notificationChannel.enableLights(true);
-            notificationChannel.enableVibration(true);
             notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{500, 500, 500});
 
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build();
-            notificationChannel.setSound(getDefaultUri(TYPE_NOTIFICATION), audioAttributes);
+
+            notificationChannel.setSound((RingtoneManager.getDefaultUri(TYPE_NOTIFICATION)), audioAttributes);
 
             notificationManager.createNotificationChannel(notificationChannel);
         }
@@ -85,15 +84,16 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        notificationBuilder.setAutoCancel(true)
+        notificationBuilder
+                .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.delivery_logo_orange)
+                .setSmallIcon(R.drawable.logo_size_invert_corner40)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setContentInfo("info")
                 .setTicker("New post")
-                .setVibrate(new long[]{0, 1000, 500, 1000})
+                .setVibrate(new long[]{500, 500, 500})
                 .setSound(RingtoneManager.getDefaultUri(TYPE_NOTIFICATION))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOnlyAlertOnce(true)
