@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                          AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle(getString(R.string.send_notification_label)+" "+model.getUsername());
 
-                        //adding view for text input
+                        //adding view text input in alertDialog
                         final EditText comment = new EditText(getApplicationContext());
                         comment.setHint(getString(R.string.send_notification_comment_text_hint));
                         LinearLayout layout = new LinearLayout(getApplicationContext());
@@ -334,8 +334,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         });
                         builder.show();
-
-
                     }
                 });
 
