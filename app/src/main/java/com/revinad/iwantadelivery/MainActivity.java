@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +48,6 @@ import com.revinad.iwantadelivery.ApiFcmNotification.SendNotificationModel;
 import com.revinad.iwantadelivery.Utills.Posts;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -210,10 +210,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void loadPost() {
 
-        if (professionV.equals(getString(R.string.profession_shop))){
+        if (professionV.equals(getString(R.string.profession_shop))) {
             options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef.orderByChild(getString(R.string.ref_posts_id_of_user)).equalTo(mAuth.getUid()), Posts.class).build();
 
-        }else if (professionV.equals(getString(R.string.profession_delivery_boy))){
+        } else if (professionV.equals(getString(R.string.profession_delivery_boy))) {
             options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef, Posts.class).build();
 
         }
@@ -246,10 +246,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+                //show sendNotificationToShopBtn if onMyWay is Checked
+                if (holder.onMyWayCB.isChecked()) {
+                    holder.sendNotificationToShopBtn.setVisibility(View.VISIBLE);
+                } else holder.sendNotificationToShopBtn.setVisibility(View.INVISIBLE);
+
                 //show deleteBtn if completeCB is checked
                 if (holder.completeCB.isChecked()) {
                     holder.deletePostBtn.setVisibility(View.VISIBLE);
-                } else holder.deletePostBtn.setVisibility(View.INVISIBLE);
+                    holder.sendNotificationToShopBtn.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.deletePostBtn.setVisibility(View.INVISIBLE);
+                }
 
                 holder.deletePostBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -264,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 postRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Log.d(TAG, "onComplete: post: "+postKey +" deleted");
+                                        Log.d(TAG, "onComplete: post: " + postKey + " deleted");
                                     }
                                 });
                             }
@@ -279,7 +287,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-                //TODO: if onMyWayCB is checked send notification to shop
+                holder.sendNotificationToShopBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mTokenRef.child(getString(R.string.profession_shop)).child(model.getIdOfUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    Log.d(TAG, "onDataChange: sendNotificationTo: "+ snapshot.getValue());
+                                    sendNotificationToToken(snapshot.getValue().toString(),"erxomai o "+ usernameV);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.d(TAG, "onCancelled: "+error.toString());
+                            }
+                        });
+                    }
+                });
 
             }
 
@@ -391,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Picasso.get().load(profileImageUrlV).placeholder(R.drawable.profile_image).resize(250, 250).centerInside().into(profileImageViewHeader);
 
                         //hide newPostBtn from profession=delivery_boy
-                        if (professionV.equals(getString(R.string.profession_delivery_boy))){
+                        if (professionV.equals(getString(R.string.profession_delivery_boy))) {
                             addPostBtn.setVisibility(View.GONE);
                         }
 
@@ -404,49 +430,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     tokenV = task.getResult();
                                     Log.d(TAG, "onComplete: Token for user: " + mAuth.getUid() + " = " + tokenV);
 
-                                    //fetch number of Tokens for profession
-                                    mTokenRef.child(professionV).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists()) {
-                                                if (!(snapshot.getValue().toString().contains(tokenV))) {
-                                                    int totalTokens = (int) snapshot.getChildrenCount();
-                                                    Log.d(TAG, "onDataChange: totalTokens: " + totalTokens);
-                                                    HashMap<String, Object> hashMap = new HashMap<>();
-                                                    hashMap.put("token" + totalTokens, tokenV);
+                                    if (professionV.equals(getString(R.string.profession_delivery_boy))) {
+                                        //fetch number of Tokens for delivery_boy and add new if don't exist with key token0..n
+                                        mTokenRef.child(getString(R.string.profession_delivery_boy)).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.exists()) {
+                                                    if (!(snapshot.getValue().toString().contains(tokenV))) {
+                                                        int totalTokens = (int) snapshot.getChildrenCount();
+                                                        Log.d(TAG, "onDataChange: totalTokens: " + totalTokens);
+                                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                                        hashMap.put("token" + totalTokens, tokenV);
 
-                                                    //saving token to database
-                                                    mTokenRef.child(professionV).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        //saving token to database
+                                                        mTokenRef.child(getString(R.string.profession_delivery_boy)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Log.d(TAG, "onComplete: token" + totalTokens + " for profession " + getString(R.string.profession_delivery_boy) + " saved");
+
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                } else {
+                                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                                    hashMap.put("token0", tokenV);
+
+                                                    mTokenRef.child(getString(R.string.profession_delivery_boy)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
-                                                                Log.d(TAG, "onComplete: token" + totalTokens + " for profession " + professionV + " saved");
-
+                                                                Log.d(TAG, "onComplete: token0 for profession " + professionV + " saved");
                                                             }
                                                         }
                                                     });
                                                 }
-                                            } else {
-                                                HashMap<String, Object> hashMap = new HashMap<>();
-                                                hashMap.put("token0", tokenV);
-
-                                                mTokenRef.child(professionV).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Log.d(TAG, "onComplete: token0 for profession " + professionV + " saved");
-                                                        }
-                                                    }
-                                                });
                                             }
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Log.d(TAG, "onCancelled: " + error.toString());
-                                        }
-                                    });
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                Log.d(TAG, "onCancelled: " + error.toString());
+                                            }
+                                        });
+                                    } else if (professionV.equals(getString(R.string.profession_shop))) {
+                                        //fetch tokens for shops with key mAuth.getUid
+                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                        hashMap.put(mAuth.getUid(), tokenV);
+                                        mTokenRef.child(getString(R.string.profession_shop)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "onComplete: token for profession " + getString(R.string.profession_shop) + " saved");
 
+                                                }
+                                            }
+                                        });
+                                    }
                                     //Save delivery_boy tokens locally
                                     mTokenRef.child(getString(R.string.profession_delivery_boy)).addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -480,7 +520,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             Log.d(TAG, "onCancelled: " + error.toString());
                                         }
                                     });
-
                                 }
                             }
                         });
