@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -290,20 +292,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 holder.sendNotificationToShopBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mTokenRef.child(getString(R.string.profession_shop)).child(model.getIdOfUser()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Log.d(TAG, "onDataChange: sendNotificationTo: "+ snapshot.getValue());
-                                    sendNotificationToToken(snapshot.getValue().toString(),"erxomai o "+ usernameV);
-                                }
-                            }
+                        //alert dialog for confirm delete
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("stalsimo idopiisis");
+                        final EditText comment = new EditText(getApplicationContext());
+                        comment.setHint("comment edw");
 
+                        LinearLayout layout = new LinearLayout(getApplicationContext());
+                        layout.setOrientation(LinearLayout.VERTICAL);
+                        layout.setPadding(24,24,24,24);
+                        layout.addView(comment);
+                        builder.setView(layout);
+
+                        builder.setPositiveButton("stile twra", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.d(TAG, "onCancelled: "+error.toString());
+                            public void onClick(DialogInterface dialog, int which) {
+                                //sendNotificationToToken
+                                mTokenRef.child(getString(R.string.profession_shop)).child(model.getIdOfUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()){
+                                            Log.d(TAG, "onDataChange: sendNotificationTo: "+ snapshot.getValue());
+                                            sendNotificationToToken(snapshot.getValue().toString(),comment.getText()+": "+ usernameV);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Log.d(TAG, "onCancelled: "+error.toString());
+                                    }
+                                });
+
+                            }
+                        }).setNegativeButton("akyro", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                Log.d(TAG, "onClick: dialogSendNotificationToShop: Canceled");
                             }
                         });
+                        builder.show();
+
+
                     }
                 });
 

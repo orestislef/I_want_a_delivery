@@ -101,6 +101,7 @@
     <string name="are_you_sure_to_delete_post_label">Είστε σίγουροι ότι θέλετε να το διαγράψετε;</string>
     <string name="dialog_yes">Ναι</string>
     <string name="dialog_no">Οχι</string>
+    <string name="notification_send_to_shop">Ερχομαι</string>
 
 
 
