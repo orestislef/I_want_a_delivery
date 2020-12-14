@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -16,22 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.revinad.iwantadelivery.ApiFcmNotification.ApiClient;
-import com.revinad.iwantadelivery.ApiFcmNotification.ApiInterface;
-import com.revinad.iwantadelivery.ApiFcmNotification.RequestNotification;
-import com.revinad.iwantadelivery.ApiFcmNotification.SendNotificationModel;
-import com.revinad.iwantadelivery.Utills.Posts;
-
-import java.util.Date;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
-import retrofit2.Callback;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 

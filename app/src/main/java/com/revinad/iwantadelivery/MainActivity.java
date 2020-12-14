@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser mUser;
     DatabaseReference mDatabaseRef, mUserRef, postRef, mTokenRef;
     String profileImageUrlV, usernameV, streetV, areaV, professionV, tokenV;
-    boolean completedV, comingV;
     CircleImageView profileImageViewHeader;
     TextView usernameHeader;
     FancyButton addPostBtn;
