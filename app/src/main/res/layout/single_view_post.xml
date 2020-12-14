@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/single_view_post_constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -66,6 +65,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textStyle="normal|bold"
+                android:lineSpacingExtra="2dp"
                 android:text="@string/post_disc_label"
                 app:layout_constraintEnd_toEndOf="@+id/timeAgo"
                 app:layout_constraintStart_toStartOf="@+id/timeAgo"
@@ -128,7 +129,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="ΕΡΧΟΜΑΙ"
+                android:text="@string/on_my_way_label"
                 app:layout_constraintEnd_toStartOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/view2"
                 app:layout_constraintTop_toTopOf="@+id/view" />
@@ -140,7 +141,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="ΟΛΟΚΛΗΡΩΘΗΚΕ"
+                android:text="@string/complete_label"
                 app:layout_constraintEnd_toEndOf="@+id/view2"
                 app:layout_constraintStart_toEndOf="@+id/view"
                 app:layout_constraintTop_toTopOf="@+id/view" />

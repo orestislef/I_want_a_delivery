@@ -94,7 +94,8 @@
     <string name="input_area">Περιοχή</string>
     <string name="btn_update_label">Αποθήκευση</string>
     <string name="notification_sended_to_token">Στάλθηκε ειδοποίηση</string>
-    <string name="ask_for_delivery_boy_at_street">Θέλω έναν ντελιβερά στην οδό: </string>
+    <string name="ask_for_delivery_boy">Θέλω έναν ντελιβερά</string>
+    <string name="ask_for_delivery_boy_at_street">στην οδό: </string>
     <string name="ask_for_delivery_boy_at_area"> στην περιοχη:</string>
     <string name="post_added_successful">Επιτυχής προσθήκη</string>
     <string name="profession_label" translatable="false">profession</string>
@@ -106,9 +107,8 @@
     <string name="send_notification_yes_label">Αποστολή</string>
     <string name="send_notification_cancel_label">Άκυρο</string>
     <string name="send_notification_comment_text_hint">Σχόλιο</string>
-
-
-
+    <string name="on_my_way_label">ΕΡΧΟΜΑΙ</string>
+    <string name="complete_label">ΟΛΟΚΛΗΡΩΘΗΚΕ</string>
 
 
 </resources>

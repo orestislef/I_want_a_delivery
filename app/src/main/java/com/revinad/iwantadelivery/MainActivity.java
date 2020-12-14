@@ -158,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void addPost(View v) {
 
         //Create Description
-        String postDesc = getString(R.string.ask_for_delivery_boy_at_street) + " " + streetV + ", " + getString(R.string.ask_for_delivery_boy_at_area) + areaV;
+        String postDesc = getString(R.string.ask_for_delivery_boy) + "\n"
+                +getString(R.string.ask_for_delivery_boy_at_street)+" "+ streetV + "\n"
+                + getString(R.string.ask_for_delivery_boy_at_area)+ " " + areaV;
 
         //Create Date
         Date date = new Date();
