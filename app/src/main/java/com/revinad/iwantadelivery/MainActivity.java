@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadPost() {
 
         if (professionV.equals(getString(R.string.profession_shop))){
-            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef.orderByChild(getString(R.string.ref_posts_id_of_user)).equalTo(mAuth.getUid()+), Posts.class).build();
+            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef.orderByChild(getString(R.string.ref_posts_id_of_user)).equalTo(mAuth.getUid()), Posts.class).build();
 
         }else if (professionV.equals(getString(R.string.profession_delivery_boy))){
             options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef, Posts.class).build();
