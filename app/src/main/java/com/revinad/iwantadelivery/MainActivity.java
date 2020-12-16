@@ -246,7 +246,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-                //TODO: if profession show what must show
+                //if shop can't click onMyWay
+                if (professionV.equals(getString(R.string.profession_shop))){
+                    holder.onMyWayCB.setClickable(false);
+                }
 
                 //show sendNotificationToShopBtn if onMyWay is Checked
                 if (holder.onMyWayCB.isChecked()) {
