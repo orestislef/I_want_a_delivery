@@ -4,9 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +22,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +37,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,7 +53,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     private TextInputLayout inputUsername, inputStreet, inputArea;
     RadioGroup inputProfession;
     RadioButton rbInputProfessionShop, rbInputProfessionDelivery;
-    Button btnSave;
+    Button btnSave, getLocationBtn;
     Uri imageUri;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
@@ -51,6 +62,8 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     String profession;
     ProgressDialog mLoadingBar;
     Toolbar toolbar;
+    FusedLocationProviderClient fusedLocationProviderClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +84,8 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         rbInputProfessionDelivery = findViewById(R.id.rbInputProfessionDelivery);
         btnSave = findViewById(R.id.btnSave);
         mLoadingBar = new ProgressDialog(this);
+        getLocationBtn = findViewById(R.id.getLocationBtn);
+
 
         //init FirebaseDatabase
         mAuth = FirebaseAuth.getInstance();
@@ -97,6 +112,22 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //check permission for location
+                if (ActivityCompat.checkSelfPermission(SetupActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    //When permission granted
+                    getCurrentLocation();
+
+                } else {
+                    ActivityCompat.requestPermissions(SetupActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+                }
+            }
+        });
+
         //init onCreate setHints
         profession = getString(R.string.profession_shop);
         inputUsername.setHint(getString(R.string.username_shop_label));
@@ -112,17 +143,17 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         //When rotate save instance to reText fields onCreate
-        outState.putParcelable("input_setup_image_uri_key",imageUri);
+        outState.putParcelable("input_setup_image_uri_key", imageUri);
         outState.putInt("input_setup_profession_key", inputProfession.getCheckedRadioButtonId());
-        outState.putString("input_setup_username_key",inputUsername.getEditText().getText().toString());
-        outState.putString("input_setup_street_key",inputStreet.getEditText().getText().toString());
-        outState.putString("input_setup_area_key",inputArea.getEditText().getText().toString());
+        outState.putString("input_setup_username_key", inputUsername.getEditText().getText().toString());
+        outState.putString("input_setup_street_key", inputStreet.getEditText().getText().toString());
+        outState.putString("input_setup_area_key", inputArea.getEditText().getText().toString());
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             //Retrieving text if screen rotates and putting it back to where it belongs
             profileImageView.setImageURI(savedInstanceState.getParcelable("input_setup_image_uri_key"));
             inputProfession.check(savedInstanceState.getInt("input_setup_profession_key"));
@@ -195,12 +226,12 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                                         // Data NOT saved on FirebaseDatabase and Show error
                                         mLoadingBar.dismiss();
                                         Log.d(TAG, "onFailure: failed to save data on FirebaseDatabase");
-                                        Toast.makeText(SetupActivity.this, "error: "+e.toString(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SetupActivity.this, "error: " + e.toString(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
                         });
-                    }else {
+                    } else {
                         //Image Din't uploaded
                         Log.d(TAG, "onComplete: Upload Image Task was NOT complete");
                         Toast.makeText(SetupActivity.this, getString(R.string.error_uploading_image), Toast.LENGTH_SHORT).show();
@@ -215,9 +246,32 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         input.requestFocus();
     }
 
+    private void getCurrentLocation() {
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                //init location
+                Location location = task.getResult();
+                if (location != null) {
+                    Geocoder geocoder = new Geocoder(SetupActivity.this, Locale.getDefault());
+                    //init address list
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        //set locality to inputStreet
+                        Objects.requireNonNull(inputStreet.getEditText()).setText(addresses.get(0).getAddressLine(0));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.profile_image:
                 //Opens default image picker from phone/tablet to chose image
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
