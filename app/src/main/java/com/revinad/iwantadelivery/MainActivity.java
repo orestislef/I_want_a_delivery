@@ -3,6 +3,7 @@ package com.revinad.iwantadelivery;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.ekalips.fancybuttonproj.FancyButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.paging.FirebaseRecyclerPagingAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -253,7 +255,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //show sendNotificationToShopBtn if onMyWay is Checked
                 if (holder.onMyWayCB.isChecked()) {
-                    holder.sendNotificationToShopBtn.setVisibility(View.VISIBLE);
+                    if (professionV.equals(getString(R.string.profession_delivery_boy))){
+                        holder.sendNotificationToShopBtn.setVisibility(View.VISIBLE);
+                    }
                 } else holder.sendNotificationToShopBtn.setVisibility(View.INVISIBLE);
 
                 //show deleteBtn if completeCB is checked
@@ -306,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         layout.setOrientation(LinearLayout.VERTICAL);
                         layout.setPadding(48,24,32,24);
                         comment.setText(getString(R.string.notification_send_to_shop));
+                        comment.setTextColor(getResources().getColor(R.color.app_bar_color));
                         layout.addView(comment);
                         builder.setView(layout);
 
