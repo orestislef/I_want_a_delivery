@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                             Log.d(TAG, "onCancelled: "+error.toString());
                         }
+
                     });
                 }else {
                     //if NOT already authenticated then go to LoginActivity

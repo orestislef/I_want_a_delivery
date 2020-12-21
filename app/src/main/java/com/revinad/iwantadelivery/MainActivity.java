@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.ekalips.fancybuttonproj.FancyButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.paging.FirebaseRecyclerPagingAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
