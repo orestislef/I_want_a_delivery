@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 if (mUser != null){
                     mUserRef.child(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
