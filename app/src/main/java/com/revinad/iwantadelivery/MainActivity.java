@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if (snapshot.exists()){
                                             Log.d(TAG, "onDataChange: sendNotificationTo: "+ snapshot.getValue());
-                                            sendNotificationToToken(snapshot.getValue().toString(),comment.getText()+": "+ usernameV);
+                                            sendNotificationToToken(Objects.requireNonNull(snapshot.getValue()).toString(),comment.getText()+": "+ usernameV);
                                         }
                                     }
 
@@ -438,15 +438,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
         } else {
             //fetching local variables profileImageUrlV, usernameV, streetV, areaV, professionV, tokenV(later)
-            mUserRef.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+            mUserRef.child(Objects.requireNonNull(mAuth.getUid())).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        profileImageUrlV = snapshot.child(getString(R.string.ref_users_profileImage)).getValue().toString();
-                        usernameV = snapshot.child(getString(R.string.ref_users_username)).getValue().toString();
-                        streetV = snapshot.child(getString(R.string.ref_users_street)).getValue().toString();
-                        areaV = snapshot.child(getString(R.string.ref_users_area)).getValue().toString();
-                        professionV = snapshot.child(getString(R.string.ref_users_profession)).getValue().toString();
+                        profileImageUrlV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_profileImage)).getValue()).toString();
+                        usernameV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_username)).getValue()).toString();
+                        streetV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_street)).getValue()).toString();
+                        areaV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_area)).getValue()).toString();
+                        professionV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_profession)).getValue()).toString();
 
                         //header init Name and Picture
                         usernameHeader.setText(usernameV);
@@ -472,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 if (snapshot.exists()) {
-                                                    if (!(snapshot.getValue().toString().contains(tokenV))) {
+                                                    if (!(Objects.requireNonNull(snapshot.getValue()).toString().contains(tokenV))) {
                                                         int totalTokens = (int) snapshot.getChildrenCount();
                                                         Log.d(TAG, "onDataChange: totalTokens: " + totalTokens);
                                                         HashMap<String, Object> hashMap = new HashMap<>();
