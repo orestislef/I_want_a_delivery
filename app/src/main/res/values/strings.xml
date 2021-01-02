@@ -81,6 +81,9 @@
     <string name="profession_delivery_boy" translatable="false">delivery_boy</string>
     <string name="setup_complete_msg">Επιτυχής ολοκλήρωση αποθήκευσης δεδομενων</string>
     <string name="error_uploading_image">Υπήρξε πρόβλημα στο ανέβασμα της εικόνας</string>
+    <string name="alert_dialog_title">Παρακαλώ επιλέξτε φωτογραφία μικρότερη απο 2mb</string>
+    <string name="alert_dialog_yes">Ok</string>
+    <string name="alert_dialog_no">Άκυρο</string>
 
     <!--for MainActivity -->
     <string name="time_ago_label" translatable="false">0 time Ago</string>

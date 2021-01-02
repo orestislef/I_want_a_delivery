@@ -7,7 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -153,15 +155,13 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            //Retrieving text if screen rotates and putting it back to where it belongs
-            profileImageView.setImageURI(savedInstanceState.getParcelable("input_setup_image_uri_key"));
-            inputProfession.check(savedInstanceState.getInt("input_setup_profession_key"));
-            inputUsername.getEditText().setText(savedInstanceState.getString("input_setup_username_key"));
-            inputStreet.getEditText().setText(savedInstanceState.getString("input_setup_street_key"));
-            inputArea.getEditText().setText(savedInstanceState.getString("input_setup_area_key"));
+        //Retrieving text if screen rotates and putting it back to where it belongs
+        profileImageView.setImageURI(savedInstanceState.getParcelable("input_setup_image_uri_key"));
+        inputProfession.check(savedInstanceState.getInt("input_setup_profession_key"));
+        Objects.requireNonNull(inputUsername.getEditText()).setText(savedInstanceState.getString("input_setup_username_key"));
+        Objects.requireNonNull(inputStreet.getEditText()).setText(savedInstanceState.getString("input_setup_street_key"));
+        Objects.requireNonNull(inputArea.getEditText()).setText(savedInstanceState.getString("input_setup_area_key"));
 
-        }
     }
 
     @Override
@@ -193,6 +193,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
 
+            //TODO: add a function to lime image size to 2mb at max
             //Upload the chosen Image
             storageRef.child(mUser.getUid()).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -247,6 +248,16 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -273,10 +284,24 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_image:
-                //Opens default image picker from phone/tablet to chose image
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_CODE);
+                //alert dialog to say for the image size
+                AlertDialog.Builder builder = new AlertDialog.Builder(SetupActivity.this);
+                builder.setTitle(getString(R.string.alert_dialog_title));
+                builder.setPositiveButton(getString(R.string.alert_dialog_yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Opens default image picker from phone/tablet to chose image
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("image/*");
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                }).setNegativeButton(getString(R.string.alert_dialog_no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
                 break;
             case R.id.btnSave:
                 attemptToSaveData(profession);

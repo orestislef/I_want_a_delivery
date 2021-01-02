@@ -1,7 +1,6 @@
 package com.revinad.iwantadelivery;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -40,7 +39,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -148,27 +146,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        //Listener for new post to scroll to top
-        mPostRef.addChildEventListener(new ChildEventListener() {
+        //Listener for new post to scroll to top recyclerView.smoothScrollToPosition((int) snapshot.getChildrenCount());
+        mPostRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 recyclerView.smoothScrollToPosition((int) snapshot.getChildrenCount());
-                Log.d(TAG, "onDataChange: posts scroll to Top");
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
@@ -193,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
-                                    Log.d(TAG, "onDataChange: online save the token: "+snapshot.getValue());
+                                    Log.d(TAG, "onDataChange: online save the token: " + snapshot.getValue());
                                     tokenDeliveryBoyList.add((String) snapshot.getValue());
                                 }
                             }
