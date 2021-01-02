@@ -75,7 +75,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         //init Toolbar
         toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.setup_profile_title));
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.setup_profile_title));
 
         profileImageView = findViewById(R.id.profile_image);
         inputUsername = findViewById(R.id.inputUsername);
@@ -147,9 +147,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         //When rotate save instance to reText fields onCreate
         outState.putParcelable("input_setup_image_uri_key", imageUri);
         outState.putInt("input_setup_profession_key", inputProfession.getCheckedRadioButtonId());
-        outState.putString("input_setup_username_key", inputUsername.getEditText().getText().toString());
-        outState.putString("input_setup_street_key", inputStreet.getEditText().getText().toString());
-        outState.putString("input_setup_area_key", inputArea.getEditText().getText().toString());
+        outState.putString("input_setup_username_key", Objects.requireNonNull(inputUsername.getEditText()).getText().toString());
+        outState.putString("input_setup_street_key", Objects.requireNonNull(inputStreet.getEditText()).getText().toString());
+        outState.putString("input_setup_area_key", Objects.requireNonNull(inputArea.getEditText()).getText().toString());
     }
 
     @Override
@@ -249,8 +249,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
 
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)

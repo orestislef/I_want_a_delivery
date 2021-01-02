@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     else
                         ((FancyButton) v).expand();
                 }
+                //TODO: ask in how much time delivery boy to arrive (maybe with a custom alertDialog)
                 addPost(v);
             }
         });
@@ -596,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 if (snapshot.exists()) {
                                     onlineCountTv.setText(String.valueOf((int) snapshot.getChildrenCount()));
                                     onlineCountBtn.setImageResource(R.drawable.online_green);
-                                }else {
+                                } else {
                                     onlineCountBtn.setImageResource(R.drawable.offline_red);
                                     onlineCountTv.setText("0");
                                 }
