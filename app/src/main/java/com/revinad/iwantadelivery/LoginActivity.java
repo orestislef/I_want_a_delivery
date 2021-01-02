@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "onFailure: "+e.getMessage());
+                    Log.d(TAG, "onFailure: " + e.getMessage());
                     mLoadingBar.dismiss();
                 }
             });

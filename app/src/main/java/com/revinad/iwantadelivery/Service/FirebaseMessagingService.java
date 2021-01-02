@@ -63,7 +63,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
                     getString(R.string.app_name),
                     NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription(getString(R.string.app_name)+" channel FCM");
+            notificationChannel.setDescription(getString(R.string.app_name) + " channel FCM");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
@@ -93,6 +93,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentText(content)
                 .setContentInfo("info")
                 .setTicker("New post")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setVibrate(new long[]{500, 500, 500})
                 .setSound(RingtoneManager.getDefaultUri(TYPE_NOTIFICATION))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

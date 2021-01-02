@@ -208,7 +208,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                                 hashMap.put(getString(R.string.ref_users_area), area);
                                 hashMap.put(getString(R.string.ref_users_profession), profession);
                                 hashMap.put(getString(R.string.ref_users_profileImage), uri.toString());
-                                hashMap.put(getString(R.string.ref_users_status), "offline");
+                                hashMap.put(getString(R.string.ref_users_status), true);
 
                                 //Saving data from EditTextBoxes to FirebaseDatabase
                                 mUserRef.child(mUser.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
@@ -226,7 +226,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                                         // Data NOT saved on FirebaseDatabase and Show error
                                         mLoadingBar.dismiss();
                                         Log.d(TAG, "onFailure: failed to save data on FirebaseDatabase");
-                                        Toast.makeText(SetupActivity.this, "error: " + e.toString(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SetupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }

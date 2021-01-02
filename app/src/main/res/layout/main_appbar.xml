@@ -5,6 +5,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/Theme.IWantADelivery"
     android:elevation="4dp"
-    android:id="@+id/app_bar">
-
-</androidx.appcompat.widget.Toolbar>
+    android:id="@+id/app_bar"/>

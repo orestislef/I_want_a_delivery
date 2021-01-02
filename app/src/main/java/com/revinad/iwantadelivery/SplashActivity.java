@@ -40,21 +40,21 @@ public class SplashActivity extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (mUser != null){
+                if (mUser != null) {
                     mUserRef.child(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()){
+                            if (snapshot.exists()) {
                                 //if already authenticated and setup is complete then go to MainActivity
-                                Intent intent = new Intent(SplashActivity.this,MainActivity.class);
+                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 //transition fade in -> fade out
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                 finish();
-                            }else {
+                            } else {
                                 //if already authenticated and setup is NOT complete then go to SetupActivity
-                                Intent intent = new Intent(SplashActivity.this,SetupActivity.class);
+                                Intent intent = new Intent(SplashActivity.this, SetupActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -62,13 +62,13 @@ public class SplashActivity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            Log.d(TAG, "onCancelled: "+error.toString());
+                            Log.d(TAG, "onCancelled: " + error.toString());
                         }
 
                     });
-                }else {
+                } else {
                     //if NOT already authenticated then go to LoginActivity
-                    Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -76,6 +76,6 @@ public class SplashActivity extends AppCompatActivity {
         };
         //delay for 0.5 sec
         Handler handler = new Handler();
-        handler.postDelayed(runnable,500);
+        handler.postDelayed(runnable, 500);
     }
 }

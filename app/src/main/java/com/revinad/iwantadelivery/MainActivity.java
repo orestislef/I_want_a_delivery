@@ -1,6 +1,7 @@
 package com.revinad.iwantadelivery;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -17,11 +18,15 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +35,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    DatabaseReference mDatabaseRef, mUserRef, postRef, mTokenRef;
+    DatabaseReference mDatabaseRef, mUserRef, mPostRef, mTokenRef;
     String profileImageUrlV, usernameV, streetV, areaV, professionV, tokenV;
+    boolean statusV;
     CircleImageView profileImageViewHeader;
     TextView usernameHeader;
     FancyButton addPostBtn;
@@ -96,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mUser = mAuth.getCurrentUser();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mUserRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.ref_users));
-        postRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.ref_posts));
+        mPostRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.ref_posts));
         mTokenRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.ref_tokens));
 
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -113,11 +121,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //init loadingBar
         mLoadingBar = new ProgressDialog(this);
 
-        //click listener
+        //click listener for add post button
         addPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: addPostBtn PRESSED");
+                //TODO: add alert dialog for when you want the delivery to come
+
                 if (v instanceof FancyButton) {
                     if (((FancyButton) v).isExpanded())
                         ((FancyButton) v).collapse();
@@ -139,32 +149,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(linearLayoutManager);
 
         //Listener for new post to scroll to top
-        postRef.addValueEventListener(new ValueEventListener() {
+        mPostRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    recyclerView.smoothScrollToPosition((int) snapshot.getChildrenCount());
-                    Log.d(TAG, "onDataChange: post scroll to Top");
-                }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                recyclerView.smoothScrollToPosition((int) snapshot.getChildrenCount());
+                Log.d(TAG, "onDataChange: posts scroll to Top");
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d(TAG, "onCancelled: No connection to postRef: " + error.toString());
+
             }
         });
+
+//        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    Log.d(TAG, "onDataChange: online Users: "+snapshot.getValue());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     private void addPost(View v) {
 
         //Create Description
         String postDesc = getString(R.string.ask_for_delivery_boy) + "\n"
-                +getString(R.string.ask_for_delivery_boy_at_street)+" "+ streetV + "\n"
-                + getString(R.string.ask_for_delivery_boy_at_area)+ " " + areaV;
+                + getString(R.string.ask_for_delivery_boy_at_street) + " " + streetV + "\n"
+                + getString(R.string.ask_for_delivery_boy_at_area) + " " + areaV;
 
         //Create Date
         Date date = new Date();
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        //SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = formatter.format(date);
 
@@ -180,41 +217,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         hashMap.put(getString(R.string.ref_post_completed_date), "");
         hashMap.put(getString(R.string.ref_post_street), streetV);
 
-        postRef.child(strDate + " " + mUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    //Post Posted
-                    ((FancyButton) v).expand();
-                    Toast.makeText(MainActivity.this, getString(R.string.post_added_successful), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onComplete: tokenList.size=" + tokenDeliveryBoyList.size());
-                    for (int i = 0; i < tokenDeliveryBoyList.size(); i++) {
-                        Log.d(TAG, "onComplete: token" + i + ": " + tokenDeliveryBoyList.get(i));
-                        sendNotificationToToken(tokenDeliveryBoyList.get(i), postDesc);
-                        Log.d(TAG, "onDataChange: post scroll to Top");
+        mPostRef.child(strDate + " " + mUser.getUid()).updateChildren(hashMap)
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            //Post Posted
+                            ((FancyButton) v).expand();
+                            Toast.makeText(MainActivity.this, getString(R.string.post_added_successful), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onComplete: tokenList.size=" + tokenDeliveryBoyList.size());
+                            for (int i = 0; i < tokenDeliveryBoyList.size(); i++) {
+                                Log.d(TAG, "onComplete: token" + i + ": " + tokenDeliveryBoyList.get(i));
+                                sendNotificationToToken(tokenDeliveryBoyList.get(i), postDesc, usernameV);
+                                Log.d(TAG, "onDataChange: post scroll to Top");
+                            }
+                        } else {
+                            ((FancyButton) v).expand();
+                            //Post did NOT posted
+                            Log.d(TAG, "onComplete: post did NOT posted");
+                            Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } else {
-                    ((FancyButton) v).expand();
-                    //Post did NOT posted
-                    Log.d(TAG, "onComplete: post did NOT posted");
-                    Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void loadPost() {
 
         if (professionV.equals(getString(R.string.profession_shop))) {
-            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef.orderByChild(getString(R.string.ref_posts_id_of_user)).equalTo(mAuth.getUid()), Posts.class).build();
+            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(mPostRef.orderByChild(getString(R.string.ref_posts_id_of_user)).equalTo(mAuth.getUid()), Posts.class).build();
 
         } else if (professionV.equals(getString(R.string.profession_delivery_boy))) {
-            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(postRef, Posts.class).build();
+            options = new FirebaseRecyclerOptions.Builder<Posts>().setQuery(mPostRef, Posts.class).build();
 
         }
         adapter = new FirebaseRecyclerAdapter<Posts, MyViewHolder>(options) {
@@ -231,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //holder for the check Buttons
                 //sets isChecked state from local completeCB, onMyWayCB to firebaseDatabase
-                holder.initCB(postKey, postRef, getApplicationContext());
+                holder.initCB(postKey, mPostRef, getApplicationContext());
                 //sets check from value of firebaseDatabase
                 holder.completeCB.setChecked(model.getCompleted());
                 holder.onMyWayCB.setChecked(model.getOnMyWay());
@@ -247,13 +286,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
 
                 //if shop can't click onMyWay
-                if (professionV.equals(getString(R.string.profession_shop))){
+                if (professionV.equals(getString(R.string.profession_shop))) {
                     holder.onMyWayCB.setClickable(false);
                 }
 
                 //show sendNotificationToShopBtn if onMyWay is Checked
                 if (holder.onMyWayCB.isChecked()) {
-                    if (professionV.equals(getString(R.string.profession_delivery_boy))){
+                    if (professionV.equals(getString(R.string.profession_delivery_boy))) {
                         holder.sendNotificationToShopBtn.setVisibility(View.VISIBLE);
                     }
                 } else holder.sendNotificationToShopBtn.setVisibility(View.INVISIBLE);
@@ -276,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //delete the post
-                                postRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                mPostRef.child(postKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         Log.d(TAG, "onComplete: post: " + postKey + " deleted");
@@ -298,15 +337,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(View v) {
                         //alert dialog for sendNotification to Token shop
-                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(getString(R.string.send_notification_label)+" "+model.getUsername());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle(getString(R.string.send_notification_label) + " " + model.getUsername());
 
                         //adding view text input in alertDialog
                         final EditText comment = new EditText(getApplicationContext());
                         comment.setHint(getString(R.string.send_notification_comment_text_hint));
                         LinearLayout layout = new LinearLayout(getApplicationContext());
                         layout.setOrientation(LinearLayout.VERTICAL);
-                        layout.setPadding(48,24,32,24);
+                        layout.setPadding(48, 24, 32, 24);
                         comment.setText(getString(R.string.notification_send_to_shop));
                         comment.setTextColor(getResources().getColor(R.color.app_bar_color));
                         layout.addView(comment);
@@ -319,15 +358,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 mTokenRef.child(getString(R.string.profession_shop)).child(model.getIdOfUser()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.exists()){
-                                            Log.d(TAG, "onDataChange: sendNotificationTo: "+ snapshot.getValue());
-                                            sendNotificationToToken(Objects.requireNonNull(snapshot.getValue()).toString(),comment.getText()+": "+ usernameV);
+                                        if (snapshot.exists()) {
+                                            Log.d(TAG, "onDataChange: sendNotificationTo: " + snapshot.getValue());
+                                            sendNotificationToToken(Objects.requireNonNull(snapshot.getValue()).toString(), comment.getText().toString(), usernameV);
                                         }
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
-                                        Log.d(TAG, "onCancelled: "+error.toString());
+                                        Log.d(TAG, "onCancelled: " + error.toString());
                                     }
                                 });
 
@@ -357,9 +396,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "onDataChange: adapterStartsListening");
     }
 
-    private void sendNotificationToToken(String token, String content) {
+    private void sendNotificationToToken(String token, String content, String usernameV) {
 
-        SendNotificationModel sendNotificationModel = new SendNotificationModel(content, getString(R.string.app_name));
+        SendNotificationModel sendNotificationModel = new SendNotificationModel(content, usernameV);
         RequestNotification requestNotification = new RequestNotification();
         requestNotification.setSendNotificationModel(sendNotificationModel);
         //token is the key to send notification ,
@@ -398,6 +437,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_menu, menu);
+        MenuItem item = menu.findItem(R.id.app_bar_switch);
+        item.setActionView(R.layout.switch_item);
+        Switch mStatusSwitch = item.getActionView().findViewById(R.id.status_switch_item);
+
+        //update firebase with user status online/offline -> true/false
+        mStatusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put(getString(R.string.ref_users_status), isChecked);
+                mUserRef.child(mAuth.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isComplete()) {
+                            if (mStatusSwitch.isChecked())
+                                mStatusSwitch.setText(getString(R.string.status_online));
+                            else
+                                mStatusSwitch.setText(getString(R.string.status_offline));
+                        }
+                    }
+                });
+            }
+        });
+        //if data changed toggle switch on or off
+        mUserRef.child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mStatusSwitch.setChecked((Boolean) snapshot.child(getString(R.string.ref_users_status)).getValue());
+                    if (professionV.equals(getString(R.string.profession_shop)))
+                        mStatusSwitch.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "onCancelled: " + error.getMessage());
+            }
+        });
+        return true;
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
@@ -410,10 +495,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.logout:
                 //log-out
-                mAuth.signOut();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                HashMap hashMap = new HashMap();
+                hashMap.put(getString(R.string.ref_users_status), false);
+                mUserRef.child(mAuth.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        if (professionV.equals(getString(R.string.profession_delivery_boy)))
+                            Toast.makeText(MainActivity.this, getString(R.string.the_user) + " " + usernameV + " " + getString(R.string.is_currently) + " " + getString(R.string.status_offline), Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
                 break;
         }
         return true;
@@ -437,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             finish();
         } else {
-            //fetching local variables profileImageUrlV, usernameV, streetV, areaV, professionV, tokenV(later)
+            //fetching local variables profileImageUrlV, usernameV, streetV, areaV, professionV, tokenV, statusV
             mUserRef.child(Objects.requireNonNull(mAuth.getUid())).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -447,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         streetV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_street)).getValue()).toString();
                         areaV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_area)).getValue()).toString();
                         professionV = Objects.requireNonNull(snapshot.child(getString(R.string.ref_users_profession)).getValue()).toString();
+                        statusV = (boolean) snapshot.child(getString(R.string.ref_users_status)).getValue();
 
                         //header init Name and Picture
                         usernameHeader.setText(usernameV);

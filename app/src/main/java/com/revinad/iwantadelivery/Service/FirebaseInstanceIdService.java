@@ -12,7 +12,7 @@ public class FirebaseInstanceIdService extends com.google.firebase.iid.FirebaseI
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: "+ refreshedToken);
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -21,6 +21,6 @@ public class FirebaseInstanceIdService extends com.google.firebase.iid.FirebaseI
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
-        Log.d("TOKEN", "sendRegistrationToServer: TOKEN "+ refreshedToken);
+        Log.d("TOKEN", "sendRegistrationToServer: TOKEN " + refreshedToken);
     }
 }
