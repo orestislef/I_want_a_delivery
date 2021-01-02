@@ -116,6 +116,9 @@
     <string name="status_offline">Ανενεργός</string>
     <string name="the_user">Ο χρήστης</string>
     <string name="is_currently">είναι πλέον</string>
+    <string name="there_is_no_online_delivery">Δεν υπάρχει διαθέσιμος ντελιβερας αυτη τη στιγμή</string>
+    <string name="dialog_no_online_ok">Δεν βιάζομαι</string>
+    <string name="dialog_no_online_no">Ακύρωση</string>
 
 
 

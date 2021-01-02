@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseRecyclerAdapter<Posts, MyViewHolder> adapter;
     FirebaseRecyclerOptions<Posts> options;
     RecyclerView recyclerView;
+    int onlineDeliveryCount;
 
     ImageButton onlineCountBtn;
     TextView onlineCountTv;
@@ -139,7 +140,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         ((FancyButton) v).expand();
                 }
                 //TODO: ask in how much time delivery boy to arrive (maybe with a custom alertDialog)
-                addPost(v);
+                if (onlineDeliveryCount > 0) {
+                    addPost(v);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle(getString(R.string.there_is_no_online_delivery));
+                    builder.setPositiveButton(getString(R.string.dialog_no_online_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            addPost(v);
+                        }
+                    }).setNegativeButton(getString(R.string.dialog_no_online_no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((FancyButton) v).expand();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                }
             }
         });
 
@@ -595,9 +614,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
+                                    onlineDeliveryCount = (int) snapshot.getChildrenCount();
                                     onlineCountTv.setText(String.valueOf((int) snapshot.getChildrenCount()));
                                     onlineCountBtn.setImageResource(R.drawable.online_green);
                                 } else {
+                                    onlineDeliveryCount = 0;
                                     onlineCountBtn.setImageResource(R.drawable.offline_red);
                                     onlineCountTv.setText("0");
                                 }
