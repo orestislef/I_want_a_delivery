@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -474,8 +474,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     mStatusSwitch.setChecked((Boolean) snapshot.child(getString(R.string.ref_users_status)).getValue());
-                    if (professionV.equals(getString(R.string.profession_shop)))
+                    if (professionV.equals(getString(R.string.profession_shop))) {
+                        mStatusSwitch.setChecked(false);
                         mStatusSwitch.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
 
