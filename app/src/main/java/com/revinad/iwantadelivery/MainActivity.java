@@ -177,19 +177,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    Log.d(TAG, "onDataChange: online Users: "+snapshot.getValue());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Log.d(TAG, "onDataChange: online Users: "+snapshot.getChildrenCount()+"\n");
+                    Log.d(TAG, "onDataChange: online Username : "+snapshot);
+
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: online key: "+dataSnapshot.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void addPost(View v) {
