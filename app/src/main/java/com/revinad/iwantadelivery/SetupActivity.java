@@ -208,7 +208,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                                 hashMap.put(getString(R.string.ref_users_area), area);
                                 hashMap.put(getString(R.string.ref_users_profession), profession);
                                 hashMap.put(getString(R.string.ref_users_profileImage), uri.toString());
-                                hashMap.put(getString(R.string.ref_users_status), true);
+                                hashMap.put(getString(R.string.ref_users_status), false);
 
                                 //Saving data from EditTextBoxes to FirebaseDatabase
                                 mUserRef.child(mUser.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
