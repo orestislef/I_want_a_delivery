@@ -177,15 +177,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //get online Users keys
         mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Log.d(TAG, "onDataChange: online Users: "+snapshot.getChildrenCount()+"\n");
-                    Log.d(TAG, "onDataChange: online Username : "+snapshot);
+                    Log.d(TAG, "onDataChange: online Users: " + snapshot.getChildrenCount() + "\n");
+                    Log.d(TAG, "onDataChange: online Username : " + snapshot);
 
-                    for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-                        Log.d(TAG, "onDataChange: online key: "+dataSnapshot.getKey());
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: online key: " + dataSnapshot.getKey());
+
+                        //save the online delivery boy token
+                        mTokenRef.child(getString(R.string.profession_delivery_boy)).child(Objects.requireNonNull(dataSnapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    Log.d(TAG, "onDataChange: online save the token: "+snapshot.getValue());
+                                    tokenDeliveryBoyList.add((String) snapshot.getValue());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, "there is no online deliverades", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }
@@ -559,103 +576,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             addPostBtn.setVisibility(View.GONE);
                         }
 
-                        //Get token
+                        //Get Tokens
                         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                             @Override
                             public void onComplete(@NonNull Task<String> task) {
                                 if (task.isSuccessful()) {
-                                    //Getting the Token
                                     tokenV = task.getResult();
-                                    Log.d(TAG, "onComplete: Token for user: " + mAuth.getUid() + " = " + tokenV);
+                                    Log.d(TAG, "onComplete: Token of User: " + mAuth.getUid() + " : " + tokenV);
 
-                                    if (professionV.equals(getString(R.string.profession_delivery_boy))) {
-                                        //fetch number of Tokens for delivery_boy and add new if don't exist with key token0..n
-                                        mTokenRef.child(getString(R.string.profession_delivery_boy)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                if (snapshot.exists()) {
-                                                    if (!(Objects.requireNonNull(snapshot.getValue()).toString().contains(tokenV))) {
-                                                        int totalTokens = (int) snapshot.getChildrenCount();
-                                                        Log.d(TAG, "onDataChange: totalTokens: " + totalTokens);
-                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                        hashMap.put("token" + totalTokens, tokenV);
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put(mAuth.getUid(), tokenV);
 
-                                                        //saving token to database
-                                                        mTokenRef.child(getString(R.string.profession_delivery_boy)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Log.d(TAG, "onComplete: token" + totalTokens + " for profession " + getString(R.string.profession_delivery_boy) + " saved");
-
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                } else {
-                                                    HashMap<String, Object> hashMap = new HashMap<>();
-                                                    hashMap.put("token0", tokenV);
-
-                                                    mTokenRef.child(getString(R.string.profession_delivery_boy)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Log.d(TAG, "onComplete: token0 for profession " + professionV + " saved");
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-                                                Log.d(TAG, "onCancelled: " + error.toString());
-                                            }
-                                        });
-                                    } else if (professionV.equals(getString(R.string.profession_shop))) {
-                                        //fetch tokens for shops with key mAuth.getUid
-                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                        hashMap.put(mAuth.getUid(), tokenV);
-                                        mTokenRef.child(getString(R.string.profession_shop)).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Log.d(TAG, "onComplete: token for profession " + getString(R.string.profession_shop) + " saved");
-
-                                                }
-                                            }
-                                        });
-                                    }
-                                    //Save delivery_boy tokens locally
-                                    mTokenRef.child(getString(R.string.profession_delivery_boy)).addValueEventListener(new ValueEventListener() {
+                                    //save token to database
+                                    mTokenRef.child(professionV).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists()) {
-                                                int totalTokens = (int) snapshot.getChildrenCount();
-                                                Log.d(TAG, "onDataChange: Total" + getString(R.string.profession_delivery_boy) + "Tokens: " + totalTokens);
-                                                for (int i = 0; i < totalTokens; i++) {
-                                                    int finalI = i;
-                                                    mTokenRef.child(getString(R.string.profession_delivery_boy) + "/token" + i).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (snapshot.exists()) {
-                                                                tokenDeliveryBoyList.add(String.valueOf(snapshot.getValue()));
-                                                                Log.d(TAG, "onDataChange: Fetching Token" + finalI + ":\t" + snapshot.getValue());
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
-                                                            Log.d(TAG, "onCancelled: " + error.toString());
-                                                        }
-                                                    });
-                                                }
-
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "onComplete: Token saved");
                                             }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Log.d(TAG, "onCancelled: " + error.toString());
                                         }
                                     });
                                 }
