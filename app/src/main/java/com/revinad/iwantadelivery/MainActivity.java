@@ -22,8 +22,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -81,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseRecyclerOptions<Posts> options;
     RecyclerView recyclerView;
 
+    ImageButton onlineCountBtn;
+    TextView onlineCountTv;
+
     private final String TAG = "MainActivity";
 
     ArrayList<String> tokenDeliveryBoyList, tokenShopList;
@@ -114,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = navigationView.inflateHeaderView(R.layout.drawer_header);
         profileImageViewHeader = view.findViewById(R.id.profileImageHeader);
         usernameHeader = view.findViewById(R.id.username_header);
+        onlineCountBtn = view.findViewById(R.id.online_count_btn);
+        onlineCountTv = view.findViewById(R.id.online_count_tv);
         navigationView.setNavigationItemSelectedListener(this);
 
         //init loadingBar
@@ -197,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void addPost(View v) {
+        //TODO: add check if no delivery boys online
 
         //Create Description
         String postDesc = getString(R.string.ask_for_delivery_boy) + "\n"
@@ -581,6 +589,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                             }
                         });
+
+                        //set online users in drawer text View
+                        mUserRef.orderByChild(getString(R.string.ref_users_status)).equalTo(true).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    onlineCountTv.setText(String.valueOf((int) snapshot.getChildrenCount()));
+                                    onlineCountBtn.setImageResource(R.drawable.online_green);
+                                }else {
+                                    onlineCountBtn.setImageResource(R.drawable.offline_red);
+                                    onlineCountTv.setText("0");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                         loadPost();
 
                     }
@@ -591,8 +618,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.d(TAG, "onCancelled: " + error.toString());
                 }
             });
-
-
         }
     }
 }

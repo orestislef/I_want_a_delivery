@@ -30,4 +30,23 @@
         app:layout_constraintStart_toStartOf="@+id/profileImageHeader"
         app:layout_constraintTop_toBottomOf="@+id/profileImageHeader" />
 
+    <ImageButton
+        android:id="@+id/online_count_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="16dp"
+        android:background="#00000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profileImageHeader"/>
+
+    <TextView
+        android:id="@+id/online_count_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="10"
+        app:layout_constraintBottom_toBottomOf="@+id/online_count_btn"
+        app:layout_constraintEnd_toStartOf="@+id/online_count_btn"
+        app:layout_constraintTop_toTopOf="@+id/online_count_btn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
