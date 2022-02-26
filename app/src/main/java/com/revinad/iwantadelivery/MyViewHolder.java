@@ -26,7 +26,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     private final String TAG = "MyViewHolder";
 
     CircleImageView profileImage;
-    TextView username, timeAgo, postDesc;
+    TextView username, timeAgo, description;
     CardView cardView;
     ConstraintLayout singleViewPostConstraint;
     CheckBox completeCB, onMyWayCB;
@@ -40,7 +40,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         profileImage = itemView.findViewById(R.id.profileImagePost);
         username = itemView.findViewById(R.id.profileUsernamePost);
         timeAgo = itemView.findViewById(R.id.timeAgo);
-        postDesc = itemView.findViewById(R.id.postDescription);
+        description = itemView.findViewById(R.id.postDescription);
         cardView = itemView.findViewById(R.id.singlePostCardView);
         completeCB = itemView.findViewById(R.id.completedCB);
         onMyWayCB = itemView.findViewById(R.id.onMyWayCB);

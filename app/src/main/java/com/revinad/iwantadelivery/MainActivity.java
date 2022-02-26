@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String postKey;
                 postKey = getRef(position).getKey();
                 Log.d(TAG, "onBindViewHolder: PostKey = " + postKey);
-                holder.postDesc.setText(model.getPostDesc());
+                holder.description.setText(model.getPostDesc());
                 String timeAgo = calculateTimeAgo(model.getPostDate());
                 holder.timeAgo.setText(timeAgo);
                 holder.username.setText(model.getUsername());
